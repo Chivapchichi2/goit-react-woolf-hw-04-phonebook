@@ -8,23 +8,21 @@ import { Notification } from './Notification/Notification';
 
 export const App = () => {
   const CONTACTS_KEY = 'contacts';
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState(initialContactsState());
   const [filter, setFilter] = useState('');
-  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
+  function initialContactsState() {
     const storedContacts = localStorage.getItem(CONTACTS_KEY);
     if (storedContacts) {
-      setContacts(JSON.parse(storedContacts));
+      return JSON.parse(storedContacts);
+    } else {
+      return [];
     }
-    setMounted(true);
-  }, []);
+  }
 
   useEffect(() => {
-    if (mounted) {
-      localStorage.setItem(CONTACTS_KEY, JSON.stringify(contacts));
-    }
-  }, [contacts, mounted]);
+    localStorage.setItem(CONTACTS_KEY, JSON.stringify(contacts));
+  }, [contacts]);
 
   const addContact = ({ name, number }) => {
     if (contacts.some(contact => contact.name === name)) {
